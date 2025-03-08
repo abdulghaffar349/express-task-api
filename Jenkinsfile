@@ -11,10 +11,7 @@ pipeline {
     
     stages {
         stage('Checkout') {
-            steps {
-                // Clean workspace before checkout
-                cleanWs()
-                
+            steps {                
                 // Checkout code from your repository
                 checkout scm
                 
@@ -85,17 +82,7 @@ pipeline {
         // }
     }
     
-    post {
-        always {
-            // Clean up workspace
-            cleanWs()
-            
-            // Clean up Docker images to save space
-            // sh 'docker rmi ${DOCKER_IMAGE}:${DOCKER_TAG} || true'
-            // sh 'docker rmi ${DOCKER_REGISTRY}/${DOCKER_IMAGE}:${DOCKER_TAG} || true'
-            // sh 'docker rmi ${DOCKER_REGISTRY}/${DOCKER_IMAGE}:latest || true'
-        }
-        
+    post {        
         success {
             echo 'Pipeline completed successfully!'
         }
