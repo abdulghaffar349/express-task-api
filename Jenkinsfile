@@ -1,14 +1,6 @@
 pipeline {
     agent any
     
-    // environment {
-    //     DOCKER_IMAGE = 'express-rest-api'
-    //     DOCKER_TAG = "${env.BUILD_NUMBER}"
-    //     SONAR_HOST_URL = 'http://sonarqube:9000'
-    //     SONAR_LOGIN = credentials('sonar-token')
-    //     DOCKER_REGISTRY = 'localhost:5000'  // Change to your registry if needed
-    // }
-    
     stages {
         stage('Checkout') {
             steps {
