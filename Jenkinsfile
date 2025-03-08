@@ -5,7 +5,7 @@ pipeline {
         DOCKER_IMAGE = 'express-rest-api'
         DOCKER_TAG = "${env.BUILD_NUMBER}"
         SONAR_HOST_URL = 'http://sonarqube:9000'
-        SONAR_TOKEN = credentials('sonar-token')
+        SONAR_LOGIN = credentials('sonar-token')
         DOCKER_REGISTRY = 'localhost:5000'  // Change to your registry if needed
     }
 
@@ -46,7 +46,7 @@ pipeline {
                             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
                             -Dsonar.exclusions=node_modules/**,coverage/**,tests/** \
                             -Dsonar.host.url=${SONAR_HOST_URL} \
-                            -Dsonar.token=${SONAR_TOKEN}
+                            -Dsonar.login=${SONAR_LOGIN}
                     '''
                 }
             }
