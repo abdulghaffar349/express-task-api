@@ -60,11 +60,10 @@ pipeline {
 			}
 		}
 
-				stage('Rename Dockerfile') {
+		stage('Rename Dockerfile') {
 		    steps {
 		        script {
 		            sh "mv DockerFile Dockerfile"
-		            
 		        }
 		    }
 		}
