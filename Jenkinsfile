@@ -52,33 +52,20 @@ pipeline {
             }
         }
 
-        stage('Quality Gate') {
-            steps {
-                timeout(time: 10, unit: 'MINUTES') {
-                    script {
-                        def qualityGate = waitForQualityGate()
-                        if (qualityGate.status != 'OK'){
-                            error "Pipeline aborted due to Quality Gate failure: ${qualityGate.status}"
-                            }
-                        }
-                    }
-                }
-        }
-
-        // stage('Build Docker Image') {
-        //     steps {
-        //         sh 'docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .'
-        //         sh 'docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_REGISTRY}/${DOCKER_IMAGE}:${DOCKER_TAG}'
-        //         sh 'docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_REGISTRY}/${DOCKER_IMAGE}:latest'
-        //     }
-        // }
-
-            // stage('Push Docker Image') {
-            //     steps {
-            //         sh 'docker push ${DOCKER_REGISTRY}/${DOCKER_IMAGE}:${DOCKER_TAG}'
-            //         sh 'docker push ${DOCKER_REGISTRY}/${DOCKER_REGISTRY}/${DOCKER_IMAGE}:latest'
-            //     }
-            // }
+		stage('Quality Gate') {
+			steps {
+				timeout(time: 10, unit: 'MINUTES') {
+					withSonarQubeEnv('SonarQube') {  // Same environment ID as in the analysis step
+						script {
+							def qualityGate = waitForQualityGate()
+							if (qualityGate.status != 'OK'){
+								error "Pipeline aborted due to Quality Gate failure: ${qualityGate.status}"
+							}
+						}
+					}
+				}
+			}
+		}
     }
 
     post {
