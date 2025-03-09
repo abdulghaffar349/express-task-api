@@ -6,7 +6,7 @@ pipeline {
         DOCKER_TAG = "${env.BUILD_NUMBER}"
         SONAR_HOST_URL = 'http://sonarqube:9000'
         SONAR_LOGIN = credentials('sonar-token-under-domain')
-        DOCKER_REGISTRY = 'localhost:5000'  // Change to your registry if needed
+        CONTAINER_NAME = 'express-rest-api'
     }
 
     stages {
@@ -59,6 +59,28 @@ pipeline {
 				}
 			}
 		}
+
+				stage('Rename Dockerfile') {
+		    steps {
+		        script {
+		            sh "mv DockerFile Dockerfile"
+		            
+		        }
+		    }
+		}
+		
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .'
+            }
+        }
+        
+        stage('Run Application') {
+            steps {
+                    sh "docker stop ${CONTAINER_NAME} || true"
+                    sh "docker run -d -p 3000:3000 --name ${CONTAINER_NAME} ${DOCKER_IMAGE}:${DOCKER_TAG}"
+            }
+        }
     }
 
     post {
